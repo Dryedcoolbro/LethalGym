@@ -1,0 +1,11 @@
+{
+  "name": "LethalGym",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/thunderstore-io",
+  "description": "Adds in the feature to workout with new decor.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100",
+    "Evaisa-LethalLib-0.11.2",
+    "Evaisa-HookGenPatcher-0.0.5"
+  ]
+}
