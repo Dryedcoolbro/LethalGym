@@ -1,5 +1,6 @@
 # Lethal Gym
 This mod adds the feature to workout in the comfort of your own ship.
+https://thunderstore.io/c/lethal-company/p/Dryedcoolbro/LethalGym/
 
 Lethal Gym includes custom animations along with the equipment.  
 **Thanks to FlipMods, the emote is compatible with TooManyEmotes and MoreEmotes**
