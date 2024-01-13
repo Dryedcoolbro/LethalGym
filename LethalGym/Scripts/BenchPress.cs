@@ -29,7 +29,6 @@ public class BenchPress : NetworkBehaviour
     public bool isRepping;
 
     public static PlayerControllerB playerController;
-    public static PlayerControllerB playerInBench;
 
     public void Awake()
     {
@@ -96,6 +95,7 @@ public class BenchPress : NetworkBehaviour
     {
         reps = serverReps;
         StartCoroutine(playRep());
+        playerController.gameObject.GetComponent<PlayerStrengthLevel>().addRep();
     }
 
     public IEnumerator playRep()
@@ -132,7 +132,6 @@ public class BenchPress : NetworkBehaviour
             if (player.playerClientId == playerInBenchID)
             {
                 playerController = player;
-                playerInBench = player;
                 overrideController = (AnimatorOverrideController)player.playerBodyAnimator.runtimeAnimatorController;
                 break;
             }
@@ -155,7 +154,6 @@ public class BenchPress : NetworkBehaviour
             if (player.playerClientId == playerInBenchID)
             {
                 playerController = player;
-                playerInBench = player;
                 overrideController = (AnimatorOverrideController)player.playerBodyAnimator.runtimeAnimatorController;
                 break;
             }

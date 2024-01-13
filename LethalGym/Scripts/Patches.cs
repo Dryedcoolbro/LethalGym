@@ -12,6 +12,7 @@ using UnityEngine.Windows;
 using BepInEx.Logging;
 using LethalLib;
 using Unity.Netcode;
+using System.Collections;
 
 namespace LethalGym.Scripts
 {
@@ -69,15 +70,25 @@ namespace LethalGym.Scripts
         [HarmonyPrefix]
         public static void KickPlayerOutClientRpc()
         {
-            GameObject.FindObjectOfType<BenchPress>().LeaveEquipment();
-            GameObject.FindObjectOfType<BenchPress>().StopSpecialAnimation();
+            BenchPress benchPress = GameObject.FindObjectOfType<BenchPress>();
+
+            if (benchPress != null)
+            {
+                benchPress.LeaveEquipment();
+                benchPress.StopSpecialAnimation();
+            }
         }
 
         [HarmonyPatch(typeof(ShipBuildModeManager), "StoreObjectServerRpc")]
         [HarmonyPrefix]
         public static void KickPlayerOutServerRpc()
         {
-            GameObject.FindObjectOfType<BenchPress>().LeaveEquipment();
+            BenchPress benchPress = GameObject.FindObjectOfType<BenchPress>();
+
+            if (benchPress != null)
+            {
+                benchPress.LeaveEquipment();
+            }
         }
     }
 
@@ -109,5 +120,60 @@ namespace LethalGym.Scripts
             }
         }
 
+    }
+
+    [HarmonyPatch]
+    internal class StrengthValuesSaveAndLoad : NetworkBehaviour
+    {
+        private static StrengthValuesSaveAndLoad Instance;
+
+        public void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+        }
+
+        [HarmonyPatch(typeof(GameNetworkManager), "SaveGameValues")]
+        [HarmonyPostfix]
+        private static void SaveStrengthValues(GameNetworkManager __instance)
+        {
+            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in players)
+            {
+                PlayerStrengthLevel psl = player.GetComponent<PlayerStrengthLevel>();
+                if (psl != null)
+                {
+                    ES3.Save("PlayerStrength" + player.playerSteamId, psl.playerStrength, __instance.currentSaveFileName);
+                    ES3.Save("PlayerReps" + player.playerSteamId, psl.currentRepsInLevel, __instance.currentSaveFileName);
+                    Debug.LogWarning(player.playerSteamId.ToString());
+                    Debug.LogWarning(psl.playerStrength + " " + psl.currentRepsInLevel);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerControllerB), "SendNewPlayerValuesClientRpc")]
+        [HarmonyPostfix]
+        private static void LoadStrengthValues(PlayerControllerB __instance)
+        {
+            PlayerStrengthLevel psl = __instance.gameObject.AddComponent<PlayerStrengthLevel>();
+
+            if (psl != null)
+            {
+                Debug.LogWarning("psl not null");
+                string saveFileName = GameObject.FindObjectOfType<GameNetworkManager>().currentSaveFileName;
+                Debug.LogWarning(saveFileName);
+                //GameObject.FindObjectOfType<GameNetworkManager>().gameObject.AddComponent<StrengthValuesSaveAndLoad>().StartCoroutine(LoadValues(psl, __instance, saveFileName));
+                while (__instance.playerSteamId == 0)
+                {
+                    
+                }
+                psl.playerStrength = ES3.Load<int>("PlayerStrength" + __instance.playerSteamId, saveFileName, 0);
+                psl.currentRepsInLevel = ES3.Load<int>("PlayerReps" + __instance.playerSteamId, saveFileName, 0);
+                Debug.LogWarning(__instance.playerSteamId.ToString());
+                Debug.LogWarning(psl.playerStrength + " " + psl.currentRepsInLevel);
+            }
+        }
     }
 }

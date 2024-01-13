@@ -88,8 +88,10 @@ namespace LethalGym
             harmony.PatchAll(typeof(Pushup));
             harmony.PatchAll(typeof(LethalGymPatches));
             harmony.PatchAll(typeof(NetworkObjectManager));
+            harmony.PatchAll(typeof(StrengthValuesSaveAndLoad));
             harmony.PatchAll(typeof(BenchPress));
             harmony.PatchAll(typeof(MoreEmotesPatcher));
+            harmony.PatchAll(typeof(PlayerStrengthLevel));
 
             NetworkObjectManager.assetBundle = assetBundle;
 
@@ -115,7 +117,7 @@ namespace LethalGym
         public static void RegisterUnlockables()
         {
             //Bench
-            Unlockables.RegisterUnlockable(unlockablesList.unlockables[0], StoreType.Decor, null, null, null, 150);
+            Unlockables.RegisterUnlockable(unlockablesList.unlockables[0], StoreType.Decor, null, null, null, 1);
         }
     }
 }
