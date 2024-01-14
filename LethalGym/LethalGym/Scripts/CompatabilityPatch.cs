@@ -22,7 +22,7 @@ namespace LethalGym.Scripts
         public static void ApplyPatch()
         {
 
-            if (Pushup.IsModLoaded("MoreEmotes"))
+            if (Plugin.IsModLoaded("MoreEmotes"))
             {
                 if (Chainloader.PluginInfos.TryGetValue("MoreEmotes", out var pluginInfo))
                 {

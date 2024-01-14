@@ -17,7 +17,7 @@ namespace LethalGym
 {
 
     [BepInPlugin(modGUID, modName, modVersion)]
-    public class Pushup : BaseUnityPlugin
+    public class Plugin : BaseUnityPlugin
     {
         //netcode-patch "A:\Mods\CustomModding\Games\LethalCompany\LethalGym\LethalGym\LethalGym\bin\Debug\netstandard2.1\LethalGym.dll" "A:\Mods\CustomModding\Games\LethalCompany\LethalGym\LethalGym\LethalGym\Dependencies"
 
@@ -27,10 +27,11 @@ namespace LethalGym
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
+        private static Plugin Instance;
 
-        private static Pushup Instance;
+        internal static ManualLogSource Logger;
 
-        internal ManualLogSource mls;
+        public static new Config Config { get; private set; }
 
         public static AssetBundle assetBundle;
 
@@ -46,6 +47,9 @@ namespace LethalGym
                 Instance = this;
             }
 
+            Config = new(base.Config);
+
+            //Netcode Patching
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var type in types)
             {
@@ -60,7 +64,7 @@ namespace LethalGym
                 }
             }
 
-            mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
+            Logger = BepInEx.Logging.Logger.CreateLogSource(modGUID);
 
             assetBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "lethalequipment"));
 
@@ -68,34 +72,38 @@ namespace LethalGym
 
             if (pushupAnimation == null)
             {
-                mls.LogError("pushupAnim not exist!");
+                Logger.LogError("pushupAnim not exist!");
             }
             else
             {
-                mls.LogInfo(pushupAnimation.name);
+                Logger.LogInfo(pushupAnimation.name);
             }
 
             if (assetBundle == null)
             {
-                mls.LogError("Assetbundle not exist!");
+                Logger.LogError("Assetbundle not exist!");
             }
             else
             {
-                mls.LogInfo(assetBundle.ToString());
-                mls.LogInfo(assetBundle.name);
+                Logger.LogInfo(assetBundle.ToString());
+                Logger.LogInfo(assetBundle.name);
             }
 
-            harmony.PatchAll(typeof(Pushup));
+            harmony.PatchAll(typeof(Plugin));
             harmony.PatchAll(typeof(LethalGymPatches));
             harmony.PatchAll(typeof(NetworkObjectManager));
             harmony.PatchAll(typeof(StrengthValuesSaveAndLoad));
+            harmony.PatchAll(typeof(ConfigApply));
             harmony.PatchAll(typeof(BenchPress));
             harmony.PatchAll(typeof(MoreEmotesPatcher));
             harmony.PatchAll(typeof(PlayerStrengthLevel));
+            harmony.PatchAll(typeof(Config));
 
             NetworkObjectManager.assetBundle = assetBundle;
 
             unlockablesList = assetBundle.LoadAsset<UnlockablesList>("Assets/MyAssets/Unlockables.asset");
+
+            unlockablesList = unlockablesList;
             LoadNetworkPrefabs();
             RegisterUnlockables();
 
@@ -117,7 +125,8 @@ namespace LethalGym
         public static void RegisterUnlockables()
         {
             //Bench
-            Unlockables.RegisterUnlockable(unlockablesList.unlockables[0], StoreType.Decor, null, null, null, 1);
+            Unlockables.RegisterUnlockable(unlockablesList.unlockables[0], StoreType.Decor, null, null, null, 60);
+            ConfigApply.unlockablesList = unlockablesList;
         }
     }
 }

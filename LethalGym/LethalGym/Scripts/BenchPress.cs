@@ -10,13 +10,18 @@ using TMPro;
 using System;
 using System.Numerics;
 using LethalGym.Scripts;
+using JetBrains.Annotations;
+using LethalGym;
 
 public class BenchPress : NetworkBehaviour
 {
     public PlayerActions playerActions;
     public InteractTrigger trigger;
     public Animator animator;
-    public TMP_Text repCounterText;
+    public TMP_Text nameText;
+    public TMP_Text repsText;
+    public GameObject[] weights;
+    public int playerStrengthLevel;
 
     public static AnimatorOverrideController overrideController;
     public static AnimationClip benchEnter;
@@ -29,6 +34,7 @@ public class BenchPress : NetworkBehaviour
     public bool isRepping;
 
     public static PlayerControllerB playerController;
+    public static PlayerStrengthLevel psl;
 
     public void Awake()
     {
@@ -55,13 +61,16 @@ public class BenchPress : NetworkBehaviour
     {
         Debug.LogWarning(term1);
         Debug.LogWarning(term2);
+        nameText.text = "Enter Bench";
+        repsText.text = "To Start Count";
     }
     
     public void Update()
     {
-        if (repCounterText != null)
+        if (nameText != null && repsText != null && psl != null)
         {
-            repCounterText.text = "Reps:" + reps.ToString();
+            nameText.text = playerController.playerUsername + "'s";
+            repsText.text = "Reps:" + psl.currentRepsInLevel;
         }
     }
 
@@ -95,7 +104,7 @@ public class BenchPress : NetworkBehaviour
     {
         reps = serverReps;
         StartCoroutine(playRep());
-        playerController.gameObject.GetComponent<PlayerStrengthLevel>().addRep();
+        playerController.gameObject.GetComponent<PlayerStrengthLevel>().addRep(this);
     }
 
     public IEnumerator playRep()
@@ -133,11 +142,16 @@ public class BenchPress : NetworkBehaviour
             {
                 playerController = player;
                 overrideController = (AnimatorOverrideController)player.playerBodyAnimator.runtimeAnimatorController;
+                psl = player.GetComponent<PlayerStrengthLevel>();
+                playerStrengthLevel = player.GetComponent<PlayerStrengthLevel>().playerStrength;
+
                 break;
             }
         }
         overrideController["TypeOnTerminal"] = benchEnter;
         overrideController["TypeOnTermina2"] = benchRep;
+        SetWeights(playerStrengthLevel);
+        Debug.LogError(playerStrengthLevel);
         animator.ResetTrigger("BarbellRep");
         animator.SetTrigger("BarbellRep");
         reps = 1;
@@ -155,14 +169,19 @@ public class BenchPress : NetworkBehaviour
             {
                 playerController = player;
                 overrideController = (AnimatorOverrideController)player.playerBodyAnimator.runtimeAnimatorController;
+                psl = player.GetComponent<PlayerStrengthLevel>();
+                playerStrengthLevel = player.GetComponent<PlayerStrengthLevel>().playerStrength;
                 break;
             }
         }
         overrideController["TypeOnTerminal"] = benchEnter;
         overrideController["TypeOnTerminal2"] = benchRep;
+        SetWeights(playerStrengthLevel);
+        Debug.LogError(playerStrengthLevel);
         animator.ResetTrigger("BarbellRep");
         animator.SetTrigger("BarbellRep");
         reps = 1;
+        playerController.gameObject.GetComponent<PlayerStrengthLevel>().addRep(this);
     }
 
     public void BackOut(InputAction.CallbackContext context)
@@ -206,8 +225,49 @@ public class BenchPress : NetworkBehaviour
         animator.SetTrigger("StopAnimation");
         inUse = false; 
         playerController = null;
+        psl = null;
     }
 
+    public void SetWeights(int levelNumber)
+    {
+        for (int i = 0; i < weights.Length; i++)
+        {
+            if (i == 0)
+            {
+                weights[i].SetActive(true);
+            }
+            else
+            {
+                weights[i].SetActive(false);
+            }
+        }
+
+        if (levelNumber == 1)
+        {
+            weights[0].SetActive(true);
+        }
+        if (levelNumber >= 2)
+        {
+            weights[1].SetActive(true);
+        }
+        if (levelNumber >= 3)
+        {
+            weights[2].SetActive(true);
+        }
+        if (levelNumber >= 4)
+        {
+            weights[3].SetActive(true);
+        }
+        if (levelNumber >= 5)
+        {
+            weights[4].SetActive(true);
+        }
+        if (levelNumber >= 6)
+        {
+            weights[5].SetActive(true);
+        }
+
+    }
 
     [ServerRpc(RequireOwnership = false)]
     public void BeginTerminalServerRPC(ulong playerID)

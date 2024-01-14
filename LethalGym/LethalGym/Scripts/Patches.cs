@@ -13,6 +13,7 @@ using BepInEx.Logging;
 using LethalLib;
 using Unity.Netcode;
 using System.Collections;
+using LethalLib.Modules;
 
 namespace LethalGym.Scripts
 {
@@ -169,11 +170,31 @@ namespace LethalGym.Scripts
                 {
                     
                 }
-                psl.playerStrength = ES3.Load<int>("PlayerStrength" + __instance.playerSteamId, saveFileName, 0);
+                psl.playerStrength = ES3.Load<int>("PlayerStrength" + __instance.playerSteamId, saveFileName, 1);
                 psl.currentRepsInLevel = ES3.Load<int>("PlayerReps" + __instance.playerSteamId, saveFileName, 0);
                 Debug.LogWarning(__instance.playerSteamId.ToString());
                 Debug.LogWarning(psl.playerStrength + " " + psl.currentRepsInLevel);
             }
+        }
+    }
+
+    [HarmonyPatch]
+    internal class ConfigApply : NetworkBehaviour
+    {
+        public static UnlockablesList unlockablesList;
+
+        [HarmonyPatch(typeof(PlayerControllerB), "Start")]
+        [HarmonyPostfix]
+        private static void UpdateBenchPriceController()
+        {
+            FindObjectOfType<EquipmentNetworkHandler>().UpdateBenchPriceStart(unlockablesList);
+        }
+
+        [HarmonyPatch(typeof(PlayerControllerB), "Update")]
+        [HarmonyPostfix]
+        private static void log()
+        {
+            Plugin.Logger.LogWarning(Config.Instance.strongerBody);
         }
     }
 }
