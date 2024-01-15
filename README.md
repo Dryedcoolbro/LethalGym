@@ -11,6 +11,7 @@ https://thunderstore.io/c/lethal-company/p/Dryedcoolbro/LethalGym/
 With a new save, you start off with level 1. As you get stronger, your level increases including the weight on the machine.
 
 ### Stronger Body
+** THIS IS OFF BY DEFAULT IN THE CONFIGS **  
 Allows you to carry heavy things and move at a faster speed.  
 As strength levels get higher, your movement is more efficient.
 
@@ -60,3 +61,6 @@ https://github.com/EvaisaDev/UnityNetcodePatcher
 ## 3.0.0
 - Added Squat Rack !!!
 - Fixed Strength Level config not being applied.
+
+## 3.0.1
+-- Forgot to update README again
