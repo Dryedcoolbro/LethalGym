@@ -13,7 +13,7 @@ using LethalGym.Scripts;
 using JetBrains.Annotations;
 using LethalGym;
 
-public class BenchPress : NetworkBehaviour
+public class Equipment : NetworkBehaviour
 {
     public PlayerActions playerActions;
     public InteractTrigger trigger;
@@ -21,13 +21,20 @@ public class BenchPress : NetworkBehaviour
     public TMP_Text nameText;
     public TMP_Text repsText;
     public GameObject[] weights;
+    public string EquipmentName;
     public int playerStrengthLevel;
 
     public static AnimatorOverrideController overrideController;
-    public static AnimationClip benchEnter;
-    public static AnimationClip benchRep;
+    public AnimationClip equipmentEnter;
+    public AnimationClip equipmentRep;
     public static AnimationClip term1;
     public static AnimationClip term2;
+
+    // ANIMATIONS
+    public static AnimationClip benchEnter;
+    public static AnimationClip benchRep;
+    public static AnimationClip squatEnter;
+    public static AnimationClip squatRep;
 
     public int reps;
     public bool inUse;
@@ -63,6 +70,21 @@ public class BenchPress : NetworkBehaviour
         Debug.LogWarning(term2);
         nameText.text = "Enter Bench";
         repsText.text = "To Start Count";
+
+        if (EquipmentName == "Bench")
+        {
+            equipmentEnter = benchEnter;
+            equipmentRep = benchRep;
+        }
+        else if (EquipmentName == "Squat")
+        {
+            equipmentEnter = squatEnter;
+            equipmentRep = squatRep;
+        }
+        else
+        {
+            Debug.LogError("No Name?");
+        }
     }
     
     public void Update()
@@ -110,7 +132,7 @@ public class BenchPress : NetworkBehaviour
     public IEnumerator playRep()
     {
         playerController.playerBodyAnimator.Play("SpecialAnimations.TypeOnTerminal2", -1, 0f);
-        animator.Play("Base Layer.BarbellRep", -1, 0f);
+        animator.Play("Base Layer.EquipmentRepAnimation", -1, 0f);
         isRepping = true;
         yield return new WaitForSeconds(1);
         isRepping = false;
@@ -148,12 +170,12 @@ public class BenchPress : NetworkBehaviour
                 break;
             }
         }
-        overrideController["TypeOnTerminal"] = benchEnter;
-        overrideController["TypeOnTermina2"] = benchRep;
+        overrideController["TypeOnTerminal"] = equipmentEnter;
+        overrideController["TypeOnTermina2"] = equipmentRep;
         SetWeights(playerStrengthLevel);
         Debug.LogError(playerStrengthLevel);
-        animator.ResetTrigger("BarbellRep");
-        animator.SetTrigger("BarbellRep");
+        animator.ResetTrigger("EquipmentRep");
+        animator.SetTrigger("EquipmentRep");
         reps = 1;
         OnEnterClientRpc(playerInBenchID);
     }
@@ -174,12 +196,12 @@ public class BenchPress : NetworkBehaviour
                 break;
             }
         }
-        overrideController["TypeOnTerminal"] = benchEnter;
-        overrideController["TypeOnTerminal2"] = benchRep;
+        overrideController["TypeOnTerminal"] = equipmentEnter;
+        overrideController["TypeOnTerminal2"] = equipmentRep;
         SetWeights(playerStrengthLevel);
         Debug.LogError(playerStrengthLevel);
-        animator.ResetTrigger("BarbellRep");
-        animator.SetTrigger("BarbellRep");
+        animator.ResetTrigger("EquipmentRep");
+        animator.SetTrigger("EquipmentRep");
         reps = 1;
         playerController.gameObject.GetComponent<PlayerStrengthLevel>().addRep(this);
     }

@@ -52,7 +52,7 @@ namespace LethalGym.Scripts
         [HarmonyPrefix]
         public static void KickPlayerOutClientRpc()
         {
-            BenchPress benchPress = GameObject.FindObjectOfType<BenchPress>();
+            Equipment benchPress = GameObject.FindObjectOfType<Equipment>();
 
             if (benchPress != null)
             {
@@ -65,7 +65,7 @@ namespace LethalGym.Scripts
         [HarmonyPrefix]
         public static void KickPlayerOutServerRpc()
         {
-            BenchPress benchPress = GameObject.FindObjectOfType<BenchPress>();
+            Equipment benchPress = GameObject.FindObjectOfType<Equipment>();
 
             if (benchPress != null)
             {
@@ -171,7 +171,7 @@ namespace LethalGym.Scripts
 
             GrabbableObject grabbedObject = (GrabbableObject)Traverse.Create(__instance).Field("currentlyGrabbingObject").GetValue();
 
-            if (psl.canGrab)
+            if (psl.canGrab && PlayerStrengthLevel.strongerBodyStatus)
             {
                 /*psl.originalCarryWeight += Mathf.Clamp(grabbedObject.itemProperties.weight - 1f, 0f, 10f);
 
@@ -225,7 +225,7 @@ namespace LethalGym.Scripts
             {
                 PlayerStrengthLevel psl = __instance.GetComponent<PlayerStrengthLevel>();
 
-                if (psl.canDrop)
+                if (psl.canDrop && PlayerStrengthLevel.strongerBodyStatus)
                 {
 /*                    psl.originalCarryWeight -= Mathf.Clamp(__instance.currentlyHeldObjectServer.itemProperties.weight - 1f, 0f, 10f);
 
@@ -260,7 +260,7 @@ namespace LethalGym.Scripts
         [HarmonyPostfix]
         private static void UpdateBenchPriceController()
         {
-            FindObjectOfType<EquipmentNetworkHandler>().UpdateBenchPriceStart(unlockablesList);
+            FindObjectOfType<EquipmentNetworkHandler>().UpdateDecorPriceStart(unlockablesList);
         }
     }
 }

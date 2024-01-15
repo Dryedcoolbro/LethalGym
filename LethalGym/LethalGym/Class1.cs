@@ -95,7 +95,7 @@ namespace LethalGym
             harmony.PatchAll(typeof(StrengthValuesSaveAndLoad));
             harmony.PatchAll(typeof(StrengthPatches));
             harmony.PatchAll(typeof(ConfigApply));
-            harmony.PatchAll(typeof(BenchPress));
+            harmony.PatchAll(typeof(Equipment));
             harmony.PatchAll(typeof(MoreEmotesPatcher));
             harmony.PatchAll(typeof(PlayerStrengthLevel));
             harmony.PatchAll(typeof(Config));
@@ -112,22 +112,35 @@ namespace LethalGym
 
         public static void LoadAnimations()
         {
-            //Bench
-            BenchPress.benchEnter = assetBundle.LoadAsset<AnimationClip>("Assets/MyAssets/Bench/BenchPressStart.anim");
-            BenchPress.benchRep = assetBundle.LoadAsset<AnimationClip>("Assets/MyAssets/Bench/BenchRep.anim");
+            // Bench
+            Equipment.benchEnter = assetBundle.LoadAsset<AnimationClip>("Assets/MyAssets/Bench/BenchPressStart.anim");
+            Equipment.benchRep = assetBundle.LoadAsset<AnimationClip>("Assets/MyAssets/Bench/BenchRep.anim");
+
+            // Squat Rack
+            Equipment.squatEnter = assetBundle.LoadAsset<AnimationClip>("Assets/MyAssets/SquatRack/SquatEnter.anim");
+            Equipment.squatRep = assetBundle.LoadAsset<AnimationClip>("Assets/MyAssets/SquatRack/SquatRep.anim");
+
         }
 
         public static void LoadNetworkPrefabs()
         {
-            //Bench
+            // Bench
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(unlockablesList.unlockables[0].prefabObject);
+
+            // Squat Rack
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(unlockablesList.unlockables[1].prefabObject);
         }
 
         public static void RegisterUnlockables()
         {
-            //Bench
-            Unlockables.RegisterUnlockable(unlockablesList.unlockables[0], StoreType.Decor, null, null, null, 60);
             ConfigApply.unlockablesList = unlockablesList;
+
+            // Bench
+            Unlockables.RegisterUnlockable(unlockablesList.unlockables[0], StoreType.Decor, null, null, null, 60);
+
+            // Squat Rack
+            Unlockables.RegisterUnlockable(unlockablesList.unlockables[1], StoreType.Decor, null, null, null, 60);
+
         }
     }
 }

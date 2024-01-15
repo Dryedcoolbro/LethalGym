@@ -43,7 +43,7 @@ public class PlayerStrengthLevel : NetworkBehaviour
         strongerBodyStatus = newStatus;
     }
 
-    public void addRep(BenchPress bench)
+    public void addRep(Equipment bench)
     {
         currentRepsInLevel++;
         Debug.LogWarning(currentRepsInLevel.ToString());

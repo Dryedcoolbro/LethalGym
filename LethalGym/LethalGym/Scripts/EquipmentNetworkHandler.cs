@@ -232,14 +232,14 @@ namespace LethalGym.Scripts
         }
 
         // Update Bench Price
-        public void UpdateBenchPriceStart(UnlockablesList unlockablesList)
+        public void UpdateDecorPriceStart(UnlockablesList unlockablesList)
         {
-            StartCoroutine(UpdateBenchPrice(unlockablesList));
+            StartCoroutine(UpdateDecorPrice(unlockablesList));
         }
 
-        public IEnumerator UpdateBenchPrice(UnlockablesList unlockablesList)
+        public IEnumerator UpdateDecorPrice(UnlockablesList unlockablesList)
         {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(2f);
 
             if (Config.Instance.strongerBody)
             {
@@ -247,8 +247,13 @@ namespace LethalGym.Scripts
                 {
                     if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[0])
                     {
-                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 59);
-                        break;
+                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 299);
+                        continue;
+                    }
+                    else if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[1])
+                    {
+                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 299);
+                        continue;
                     }
                 }
             }
@@ -258,8 +263,13 @@ namespace LethalGym.Scripts
                 {
                     if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[0])
                     {
-                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 60);
-                        break;
+                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 1);
+                        continue;
+                    }
+                    else if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[1])
+                    {
+                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 1);
+                        continue;
                     }
                 }
             }

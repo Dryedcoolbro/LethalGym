@@ -39,7 +39,7 @@ namespace LethalGym.Scripts
                                 if (clip.name == "TypeOnTerminal")
                                 {
                                     terminal1 = clip;
-                                    BenchPress.term1 = terminal1;
+                                    Equipment.term1 = terminal1;
                                 }
                             }
 
@@ -48,7 +48,7 @@ namespace LethalGym.Scripts
                                 if (clip.name == "TypeOnTerminal2")
                                 {
                                     terminal2 = clip;
-                                    BenchPress.term2 = terminal2;
+                                    Equipment.term2 = terminal2;
                                 }
                             }
 

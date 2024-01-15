@@ -2,18 +2,24 @@
 This mod adds the feature to workout in the comfort of your own ship.
 
 Lethal Gym includes custom animations along with the equipment.  
-**Thanks to FlipMods, the emote is compatible with TooManyEmotes and MoreEmotes**
+**Thanks to FlipMods, the emote is compatible with TooManyEmotes and MoreEmotes**  
 https://thunderstore.io/c/lethal-company/p/Dryedcoolbro/LethalGym/
 
 ![Lethal Company Benching Gif](https://imgur.com/6SGjN07.gif)
 
+### Strength Levels
+With a new save, you start off with level 1. As you get stronger, your level increases including the weight on the machine.
+
+### Stronger Body
+Allows you to carry heavy things and move at a faster speed.  
+As strength levels get higher, your movement is more efficient.
+
 ### Current Lifts:
 - Bench Press
+- Squat Rack
 
 ### Upcoming/Planned:
-- Squat Rack
 - DeadLift Platform
-- Possible strength levels - Higher level = More weights
 
 **!!! UPCOMING/PLANNED LIFTS ARE NOT GUARANTEED TO COME !!!** 
 
@@ -47,3 +53,10 @@ https://github.com/EvaisaDev/UnityNetcodePatcher
 - Added "Strength Levels." e.g., Bench Press. You will start off in a new save with just the bar. As you do more reps, you will level up and add weights to the bar.
 - Added Config files. Configs sync based on the host. At the time of writing this, there is only one config (Stronger Body).
 - Stronger Body. This allows you to be able to carry heavy things at a faster speed when you have a high strength level. **This is optional and can be turned off in the configs**
+
+## 2.0.1
+- Updated README
+
+## 3.0.0
+- Added Squat Rack !!!
+- Fixed Strength Level config not being applied.
