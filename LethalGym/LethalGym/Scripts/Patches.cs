@@ -37,25 +37,6 @@ namespace LethalGym.Scripts
             __instance.otherClientsAnimatorController = overrideController;
         }
 
-        [HarmonyPatch(typeof(PlayerControllerB), "Update")]
-        [HarmonyPostfix]
-        public static void AddEmoteToPlayer(PlayerControllerB __instance)
-        {
-/*            if (!__instance.inTerminalMenu)
-            {
-                AnimatorOverrideController controller = (AnimatorOverrideController)__instance.playerBodyAnimator.runtimeAnimatorController;
-                if (controller != null)
-                {
-                    if ((__instance.playerBodyAnimator.runtimeAnimatorController as AnimatorOverrideController)["TypeOnTerminal"] != benchEnter && (__instance.playerBodyAnimator.runtimeAnimatorController as AnimatorOverrideController)["TypeOnTerminal2"] != benchRep)
-                    {
-                        (__instance.playerBodyAnimator.runtimeAnimatorController as AnimatorOverrideController)["TypeOnTerminal"] = benchEnter;
-                        (__instance.playerBodyAnimator.runtimeAnimatorController as AnimatorOverrideController)["TypeOnTerminal2"] = benchRep;
-                    }
-                }
-
-            }*/
-        }
-
         [HarmonyPatch(typeof(Terminal), "BeginUsingTerminal")]
         [HarmonyPostfix]
         public static void ResetAnimation(Terminal __instance)
@@ -163,6 +144,7 @@ namespace LethalGym.Scripts
             if (psl != null)
             {
                 Debug.LogWarning("psl not null");
+                psl.playerController = __instance;
                 string saveFileName = GameObject.FindObjectOfType<GameNetworkManager>().currentSaveFileName;
                 Debug.LogWarning(saveFileName);
                 //GameObject.FindObjectOfType<GameNetworkManager>().gameObject.AddComponent<StrengthValuesSaveAndLoad>().StartCoroutine(LoadValues(psl, __instance, saveFileName));
@@ -179,6 +161,97 @@ namespace LethalGym.Scripts
     }
 
     [HarmonyPatch]
+    internal class StrengthPatches : NetworkBehaviour
+    {
+        [HarmonyPatch(typeof(PlayerControllerB), "GrabObjectClientRpc")]
+        [HarmonyPostfix]
+        private static void BeginGrab(PlayerControllerB __instance)
+        {
+            PlayerStrengthLevel psl = __instance.GetComponent<PlayerStrengthLevel>();
+
+            GrabbableObject grabbedObject = (GrabbableObject)Traverse.Create(__instance).Field("currentlyGrabbingObject").GetValue();
+
+            if (psl.canGrab)
+            {
+                /*psl.originalCarryWeight += Mathf.Clamp(grabbedObject.itemProperties.weight - 1f, 0f, 10f);
+
+                Debug.LogError(grabbedObject.itemProperties.itemName + " " + grabbedObject.itemProperties.weight.ToString());
+
+                Debug.LogError("(Grab) First original weight: " + psl.originalCarryWeight.ToString());
+
+                switch (psl.playerStrength)
+                {
+                    case 1:
+                        __instance.carryWeight = psl.originalCarryWeight / 1f;
+                        break;
+                    case 2:
+                        __instance.carryWeight = psl.originalCarryWeight / 1.05f;
+                        break;
+                    case 3:
+                        __instance.carryWeight = psl.originalCarryWeight / 1.1f;
+                        break;
+                    case 4:
+                        __instance.carryWeight = psl.originalCarryWeight / 1.3f;
+                        break;
+                    case 5:
+                        __instance.carryWeight = psl.originalCarryWeight / 1.5f;
+                        break;
+                }
+
+                Debug.LogError("(Grab) Middle instance: " + __instance.carryWeight.ToString());
+
+                if (__instance.carryWeight < 1)
+                {
+                    __instance.carryWeight = 1;
+                    psl.originalCarryWeight = 1;
+                    Debug.LogWarning("Carry weight less than 1.0");
+                }
+
+                Debug.LogError("(grab) Last original: " + psl.originalCarryWeight.ToString());
+
+                Debug.LogError("(Grab) Last instance: " + __instance.carryWeight.ToString());
+*/
+                FindObjectOfType<EquipmentNetworkHandler>().DoubleCheckGrabFunction(psl, true);
+                FindObjectOfType<EquipmentNetworkHandler>().GrabWeightServerRpc(__instance.playerClientId, grabbedObject.itemProperties.weight);
+                psl.canGrab = false;
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerControllerB), "DiscardHeldObject")]
+        [HarmonyPrefix]
+        private static void BeginDrop(PlayerControllerB __instance, bool placeObject = false, NetworkObject parentObjectTo = null, Vector3 placePosition = default(Vector3), bool matchRotationOfParent = true)
+        {
+            if (!placeObject)
+            {
+                PlayerStrengthLevel psl = __instance.GetComponent<PlayerStrengthLevel>();
+
+                if (psl.canDrop)
+                {
+/*                    psl.originalCarryWeight -= Mathf.Clamp(__instance.currentlyHeldObjectServer.itemProperties.weight - 1f, 0f, 10f);
+
+                    Debug.LogError(__instance.currentlyHeldObjectServer.itemProperties.itemName);
+
+                    Debug.LogError("(Grab) First original weight: " + psl.originalCarryWeight.ToString());*/
+
+                    FindObjectOfType<EquipmentNetworkHandler>().ChangeWeightsFunction(__instance, psl);
+                    FindObjectOfType<EquipmentNetworkHandler>().DropWeightServerRpc(__instance.playerClientId, __instance.currentlyHeldObjectServer.itemProperties.weight);
+                    psl.canDrop = false;
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(HUDManager), "Update")]
+        [HarmonyPostfix]
+        private static void ChangeHUDWeight(HUDManager __instance)
+        {
+            PlayerStrengthLevel psl = GameNetworkManager.Instance.localPlayerController.gameObject.GetComponent<PlayerStrengthLevel>();
+            float weightNum = (float)Mathf.RoundToInt(Mathf.Clamp(psl.originalCarryWeight - 1f, 0f, 100f) * 105f);
+            __instance.weightCounter.text = string.Format("{0} lb", weightNum);
+            __instance.weightCounterAnimator.SetFloat("weight", weightNum / 130f);
+        }
+    }
+
+    [HarmonyPatch]
     internal class ConfigApply : NetworkBehaviour
     {
         public static UnlockablesList unlockablesList;
@@ -188,13 +261,6 @@ namespace LethalGym.Scripts
         private static void UpdateBenchPriceController()
         {
             FindObjectOfType<EquipmentNetworkHandler>().UpdateBenchPriceStart(unlockablesList);
-        }
-
-        [HarmonyPatch(typeof(PlayerControllerB), "Update")]
-        [HarmonyPostfix]
-        private static void log()
-        {
-            Plugin.Logger.LogWarning(Config.Instance.strongerBody);
         }
     }
 }

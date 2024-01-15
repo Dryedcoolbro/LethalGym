@@ -4,6 +4,7 @@ using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEditor;
+using GameNetcodeStuff;
 
 public class PlayerStrengthLevel : NetworkBehaviour
 {
@@ -16,14 +17,30 @@ public class PlayerStrengthLevel : NetworkBehaviour
     public static int repsNeededL4 = 100;
     public static int repsNeededL5 = 200;
 
+    public bool canGrab;
+    public bool canDrop;
+
+    public static bool strongerBodyStatus;
+
+    public float originalCarryWeight;
+
+    public PlayerControllerB playerController;
+
     public void Start()
     {
-
+        originalCarryWeight = 1f;
+        canGrab = true;
+        canDrop = true;
     }
 
     public void Update()
     {
+        
+    }
 
+    public void UpdateStrongerBodyStatus(bool newStatus)
+    {
+        strongerBodyStatus = newStatus;
     }
 
     public void addRep(BenchPress bench)

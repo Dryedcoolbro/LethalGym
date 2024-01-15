@@ -93,6 +93,7 @@ namespace LethalGym
             harmony.PatchAll(typeof(LethalGymPatches));
             harmony.PatchAll(typeof(NetworkObjectManager));
             harmony.PatchAll(typeof(StrengthValuesSaveAndLoad));
+            harmony.PatchAll(typeof(StrengthPatches));
             harmony.PatchAll(typeof(ConfigApply));
             harmony.PatchAll(typeof(BenchPress));
             harmony.PatchAll(typeof(MoreEmotesPatcher));
