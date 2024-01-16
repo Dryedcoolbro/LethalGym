@@ -70,3 +70,6 @@ https://github.com/EvaisaDev/UnityNetcodePatcher
 
 ## 3.1.0
 - Accidentally left the bench and squat rack at a price of 1 dollar when debugging.
+
+## 3.2.0
+- Fixed major syncing issues with the configs and animations.

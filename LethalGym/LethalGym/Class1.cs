@@ -89,7 +89,7 @@ namespace LethalGym
                 Logger.LogInfo(assetBundle.name);
             }
 
-            harmony.PatchAll(typeof(Plugin));
+/*            harmony.PatchAll(typeof(Plugin));
             harmony.PatchAll(typeof(LethalGymPatches));
             harmony.PatchAll(typeof(NetworkObjectManager));
             harmony.PatchAll(typeof(StrengthValuesSaveAndLoad));
@@ -99,6 +99,8 @@ namespace LethalGym
             harmony.PatchAll(typeof(MoreEmotesPatcher));
             harmony.PatchAll(typeof(PlayerStrengthLevel));
             harmony.PatchAll(typeof(Config));
+*/
+            harmony.PatchAll();
 
             NetworkObjectManager.assetBundle = assetBundle;
 

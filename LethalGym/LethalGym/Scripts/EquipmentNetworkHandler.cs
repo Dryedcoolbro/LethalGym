@@ -24,6 +24,40 @@ namespace LethalGym.Scripts
 
         public static EquipmentNetworkHandler Instance { get; private set; }
 
+        // Sync PSLs
+        [ServerRpc(RequireOwnership = false)]
+        public void SyncStrengthValuesServerRpc()
+        {
+            PlayerControllerB[] allPlayers = FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in allPlayers)
+            {
+                PlayerStrengthLevel psl = player.GetComponent<PlayerStrengthLevel>();
+                SyncStrengthValuesClientRpc(player.playerClientId, psl.playerStrength, psl.currentRepsInLevel, psl.originalCarryWeight, strongerBody);
+            }
+        }
+
+        [ClientRpc]
+        public void SyncStrengthValuesClientRpc(ulong playerID, int playerStrength, int currentRepsInLevel, float carryWeight, bool strongerBody)
+        {
+            PlayerControllerB[] allPlayers = FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in allPlayers)
+            {
+                if (player.playerClientId == playerID)
+                {
+                    PlayerStrengthLevel psl = player.GetComponent<PlayerStrengthLevel>();
+                    if (psl == null)
+                    {
+                        psl = player.gameObject.AddComponent<PlayerStrengthLevel>();
+                    }
+
+                    psl.playerStrength = playerStrength;
+                    psl.currentRepsInLevel = currentRepsInLevel;
+                    psl.originalCarryWeight = carryWeight;
+                    PlayerStrengthLevel.strongerBodyStatus = strongerBody;
+                }
+            }
+        }
+
         // Check Weights
         public void DoubleCheckGrabFunction(PlayerStrengthLevel psl, bool GrabOrDrop)
         {
@@ -164,6 +198,7 @@ namespace LethalGym.Scripts
                 psl.originalCarryWeight = 1;
             }
 
+            Debug.LogWarning(psl.originalCarryWeight.ToString());
         }
 
         [ServerRpc]
@@ -229,6 +264,8 @@ namespace LethalGym.Scripts
                 player.carryWeight = 1;
                 psl.originalCarryWeight = 1;
             }
+
+            Debug.LogWarning(psl.originalCarryWeight.ToString()); Debug.LogWarning(psl.originalCarryWeight.ToString());
         }
 
         // Update Bench Price
@@ -263,12 +300,12 @@ namespace LethalGym.Scripts
                 {
                     if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[0])
                     {
-                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 1);
+                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 60);
                         continue;
                     }
                     else if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[1])
                     {
-                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 1);
+                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 60);
                         continue;
                     }
                 }

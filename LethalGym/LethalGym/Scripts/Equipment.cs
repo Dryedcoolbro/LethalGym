@@ -24,7 +24,7 @@ public class Equipment : NetworkBehaviour
     public string EquipmentName;
     public int playerStrengthLevel;
 
-    public static AnimatorOverrideController overrideController;
+    public AnimatorOverrideController overrideController;
     public AnimationClip equipmentEnter;
     public AnimationClip equipmentRep;
     public static AnimationClip term1;
@@ -40,8 +40,8 @@ public class Equipment : NetworkBehaviour
     public bool inUse;
     public bool isRepping;
 
-    public static PlayerControllerB playerController;
-    public static PlayerStrengthLevel psl;
+    public PlayerControllerB playerController;
+    public PlayerStrengthLevel psl;
 
     public void Awake()
     {
@@ -170,6 +170,27 @@ public class Equipment : NetworkBehaviour
                 break;
             }
         }
+
+        if (equipmentEnter == null)
+        {
+            Debug.LogError("equipmentEnter is null");
+        }
+        else
+        {
+            Debug.LogError(equipmentEnter.name.ToString());
+        }
+        
+        if (equipmentRep == null)
+        {
+            Debug.LogError("equipmentRep is null");
+        }
+        else
+        {
+            Debug.LogError(equipmentRep.name.ToString());
+        }
+
+        Debug.LogError(overrideController.name.ToString());
+
         overrideController["TypeOnTerminal"] = equipmentEnter;
         overrideController["TypeOnTermina2"] = equipmentRep;
         SetWeights(playerStrengthLevel);
@@ -192,10 +213,39 @@ public class Equipment : NetworkBehaviour
                 playerController = player;
                 overrideController = (AnimatorOverrideController)player.playerBodyAnimator.runtimeAnimatorController;
                 psl = player.GetComponent<PlayerStrengthLevel>();
+                if (psl == null)
+                {
+                    Debug.LogWarning("no psl");
+                }
+
                 playerStrengthLevel = player.GetComponent<PlayerStrengthLevel>().playerStrength;
                 break;
             }
         }
+
+        if (equipmentEnter == null)
+        {
+            Debug.LogError("equipmentEnter is null");
+        }
+        else
+        {
+            Debug.LogError(equipmentEnter.name.ToString());
+        }
+
+        if (equipmentRep == null)
+        {
+            Debug.LogError("equipmentRep is null");
+        }
+        else
+        {
+            Debug.LogError(equipmentRep.name.ToString());
+        }
+        
+        if (overrideController == null)
+        {
+            Debug.LogError("no overridecontroller");
+        }
+
         overrideController["TypeOnTerminal"] = equipmentEnter;
         overrideController["TypeOnTerminal2"] = equipmentRep;
         SetWeights(playerStrengthLevel);
@@ -325,7 +375,7 @@ public class Equipment : NetworkBehaviour
 
     public static void resetAnimations(AnimatorOverrideController controller)
     {
-        List<KeyValuePair<AnimationClip, AnimationClip>> overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>(overrideController.overridesCount);
+        List<KeyValuePair<AnimationClip, AnimationClip>> overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>(controller.overridesCount);
         controller.GetOverrides(overrides);
         for (int i = 0; i < overrides.Count; ++i)
             overrides[i] = new KeyValuePair<AnimationClip, AnimationClip>(overrides[i].Key, null);

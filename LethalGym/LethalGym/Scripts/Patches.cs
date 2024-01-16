@@ -72,6 +72,30 @@ namespace LethalGym.Scripts
                 benchPress.LeaveEquipment();
             }
         }
+
+        [HarmonyPatch(typeof(PlayerControllerB), "Start")]
+        [HarmonyPrefix]
+        public static void CheckLiftName()
+        {
+            Equipment[] allequipments = GameObject.FindObjectsOfType<Equipment>();
+            foreach (Equipment equipment in allequipments)
+            {
+                if (equipment.EquipmentName == "Bench")
+                {
+                    equipment.equipmentEnter = Equipment.benchEnter;
+                    equipment.equipmentRep = Equipment.benchRep;
+                }
+                else if (equipment.EquipmentName == "Squat")
+                {
+                    equipment.equipmentEnter = Equipment.squatEnter;
+                    equipment.equipmentRep = Equipment.squatRep;
+                }
+                else
+                {
+                    Debug.LogError("No Name?");
+                }
+            }
+        }
     }
 
     [HarmonyPatch]
@@ -139,8 +163,13 @@ namespace LethalGym.Scripts
         [HarmonyPostfix]
         private static void LoadStrengthValues(PlayerControllerB __instance)
         {
-            PlayerStrengthLevel psl = __instance.gameObject.AddComponent<PlayerStrengthLevel>();
+            PlayerStrengthLevel psl = __instance.gameObject.GetComponent<PlayerStrengthLevel>();
 
+            if (__instance.gameObject.GetComponent<PlayerStrengthLevel>() == null)
+            {
+                 psl = __instance.gameObject.AddComponent<PlayerStrengthLevel>();
+
+            }
             if (psl != null)
             {
                 Debug.LogWarning("psl not null");
@@ -157,6 +186,8 @@ namespace LethalGym.Scripts
                 Debug.LogWarning(__instance.playerSteamId.ToString());
                 Debug.LogWarning(psl.playerStrength + " " + psl.currentRepsInLevel);
             }
+
+            FindObjectOfType<EquipmentNetworkHandler>().SyncStrengthValuesServerRpc();
         }
     }
 
@@ -244,10 +275,20 @@ namespace LethalGym.Scripts
         [HarmonyPostfix]
         private static void ChangeHUDWeight(HUDManager __instance)
         {
-            PlayerStrengthLevel psl = GameNetworkManager.Instance.localPlayerController.gameObject.GetComponent<PlayerStrengthLevel>();
-            float weightNum = (float)Mathf.RoundToInt(Mathf.Clamp(psl.originalCarryWeight - 1f, 0f, 100f) * 105f);
-            __instance.weightCounter.text = string.Format("{0} lb", weightNum);
-            __instance.weightCounterAnimator.SetFloat("weight", weightNum / 130f);
+
+            if (PlayerStrengthLevel.strongerBodyStatus)
+            {
+                Debug.LogWarning(PlayerStrengthLevel.strongerBodyStatus);
+
+                PlayerStrengthLevel psl = GameNetworkManager.Instance.localPlayerController.gameObject.GetComponent<PlayerStrengthLevel>();
+                if (psl == null)
+                {
+                    Debug.LogWarning("no psl?>?>");
+                }
+                float weightNum = (float)Mathf.RoundToInt(Mathf.Clamp(psl.originalCarryWeight - 1f, 0f, 100f) * 105f);
+                __instance.weightCounter.text = string.Format("{0} lb", weightNum);
+                __instance.weightCounterAnimator.SetFloat("weight", weightNum / 130f);
+            }
         }
     }
 
