@@ -81,3 +81,6 @@ https://github.com/EvaisaDev/UnityNetcodePatcher
 
 ## 3.3.1
 - Put the equipment under "Ship Upgrades"
+
+## 3.3.2
+- Fixed bug where you couldn't buy equipment from ship upgrades
