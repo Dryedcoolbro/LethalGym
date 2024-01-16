@@ -25,7 +25,7 @@ As strength levels get higher, your movement is more efficient.
 **!!! UPCOMING/PLANNED LIFTS ARE NOT GUARANTEED TO COME !!!** 
 
 ## Issues
-If there are any issues or bugs create an issue on the github page or report it on the discord modding server.  
+If there are any issues or bugs PLEASE create an issue on the github page or report it on the discord modding server.  
 https://github.com/Dryedcoolbro/LethalGym  
 https://discord.com/channels/1168655651455639582/1190807167482208337
 
