@@ -15,7 +15,7 @@ With a new save, you start off with level 1. As you get stronger, your level inc
 Allows you to carry heavy things and move at a faster speed.  
 As strength levels get higher, your movement is more efficient.
 
-### Current Lifts:
+### Current Lifts (lifts won't show up in the shop but is still buyable by typing name):
 - Bench Press
 - Squat Rack
 
@@ -73,3 +73,11 @@ https://github.com/EvaisaDev/UnityNetcodePatcher
 
 ## 3.2.0
 - Fixed major syncing issues with the configs and animations.
+
+## 3.3.0
+- Fixed major bug when placing items in shelf and on counter
+- Fixed hitboxes for squat rack
+- Updated README
+
+## 3.3.1
+- Put the equipment under "Ship Upgrades"

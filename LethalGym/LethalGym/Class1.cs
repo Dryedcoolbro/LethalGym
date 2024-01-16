@@ -138,10 +138,10 @@ namespace LethalGym
             ConfigApply.unlockablesList = unlockablesList;
 
             // Bench
-            Unlockables.RegisterUnlockable(unlockablesList.unlockables[0], StoreType.Decor, null, null, null, 60);
+            Unlockables.RegisterUnlockable(unlockablesList.unlockables[0], StoreType.ShipUpgrade, null, null, null, 60);
 
             // Squat Rack
-            Unlockables.RegisterUnlockable(unlockablesList.unlockables[1], StoreType.Decor, null, null, null, 60);
+            Unlockables.RegisterUnlockable(unlockablesList.unlockables[1], StoreType.ShipUpgrade, null, null, null, 60);
 
         }
     }

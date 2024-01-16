@@ -11,7 +11,9 @@ namespace LethalGym.Scripts
 {
     public class EquipmentNetworkHandler : NetworkBehaviour
     {
+        // Configs
         public static bool strongerBody;
+        public static bool alwaysInStock;
 
         public override void OnNetworkSpawn()
         {
@@ -122,14 +124,14 @@ namespace LethalGym.Scripts
             psl.canDrop = false;
         }
 
-        public static void setStrongerBody(bool strongerBodyValue)
+        public static void setConfigs(bool strongerBodyValue)
         {
             strongerBody = strongerBodyValue;
 
             PlayerStrengthLevel[] psls = FindObjectsOfType<PlayerStrengthLevel>();
             foreach (PlayerStrengthLevel psl in psls)
             {
-                psl.UpdateStrongerBodyStatus(strongerBody);
+                psl.UpdateConfigs(strongerBody);
             }
         }
 
@@ -311,7 +313,7 @@ namespace LethalGym.Scripts
                 }
             }
 
-            setStrongerBody(Config.Instance.strongerBody);
+            setConfigs(Config.Instance.strongerBody);
         }
 
         // Terminal RPC

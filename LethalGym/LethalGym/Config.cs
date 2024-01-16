@@ -22,6 +22,7 @@ namespace LethalGym
             InitInstance(this);
 
             strongerBody = cfg.Bind("General", "Stronger Body", false, "More strength levels you have, the faster you can walk while carrying heavy items").Value;
+
         }
 
         public static void RequestSync()

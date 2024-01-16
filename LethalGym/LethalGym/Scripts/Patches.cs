@@ -204,44 +204,6 @@ namespace LethalGym.Scripts
 
             if (psl.canGrab && PlayerStrengthLevel.strongerBodyStatus)
             {
-                /*psl.originalCarryWeight += Mathf.Clamp(grabbedObject.itemProperties.weight - 1f, 0f, 10f);
-
-                Debug.LogError(grabbedObject.itemProperties.itemName + " " + grabbedObject.itemProperties.weight.ToString());
-
-                Debug.LogError("(Grab) First original weight: " + psl.originalCarryWeight.ToString());
-
-                switch (psl.playerStrength)
-                {
-                    case 1:
-                        __instance.carryWeight = psl.originalCarryWeight / 1f;
-                        break;
-                    case 2:
-                        __instance.carryWeight = psl.originalCarryWeight / 1.05f;
-                        break;
-                    case 3:
-                        __instance.carryWeight = psl.originalCarryWeight / 1.1f;
-                        break;
-                    case 4:
-                        __instance.carryWeight = psl.originalCarryWeight / 1.3f;
-                        break;
-                    case 5:
-                        __instance.carryWeight = psl.originalCarryWeight / 1.5f;
-                        break;
-                }
-
-                Debug.LogError("(Grab) Middle instance: " + __instance.carryWeight.ToString());
-
-                if (__instance.carryWeight < 1)
-                {
-                    __instance.carryWeight = 1;
-                    psl.originalCarryWeight = 1;
-                    Debug.LogWarning("Carry weight less than 1.0");
-                }
-
-                Debug.LogError("(grab) Last original: " + psl.originalCarryWeight.ToString());
-
-                Debug.LogError("(Grab) Last instance: " + __instance.carryWeight.ToString());
-*/
                 FindObjectOfType<EquipmentNetworkHandler>().DoubleCheckGrabFunction(psl, true);
                 FindObjectOfType<EquipmentNetworkHandler>().GrabWeightServerRpc(__instance.playerClientId, grabbedObject.itemProperties.weight);
                 psl.canGrab = false;
@@ -252,22 +214,13 @@ namespace LethalGym.Scripts
         [HarmonyPrefix]
         private static void BeginDrop(PlayerControllerB __instance, bool placeObject = false, NetworkObject parentObjectTo = null, Vector3 placePosition = default(Vector3), bool matchRotationOfParent = true)
         {
-            if (!placeObject)
+            PlayerStrengthLevel psl = __instance.GetComponent<PlayerStrengthLevel>();
+
+            if (psl.canDrop && PlayerStrengthLevel.strongerBodyStatus)
             {
-                PlayerStrengthLevel psl = __instance.GetComponent<PlayerStrengthLevel>();
-
-                if (psl.canDrop && PlayerStrengthLevel.strongerBodyStatus)
-                {
-/*                    psl.originalCarryWeight -= Mathf.Clamp(__instance.currentlyHeldObjectServer.itemProperties.weight - 1f, 0f, 10f);
-
-                    Debug.LogError(__instance.currentlyHeldObjectServer.itemProperties.itemName);
-
-                    Debug.LogError("(Grab) First original weight: " + psl.originalCarryWeight.ToString());*/
-
-                    FindObjectOfType<EquipmentNetworkHandler>().ChangeWeightsFunction(__instance, psl);
-                    FindObjectOfType<EquipmentNetworkHandler>().DropWeightServerRpc(__instance.playerClientId, __instance.currentlyHeldObjectServer.itemProperties.weight);
-                    psl.canDrop = false;
-                }
+                FindObjectOfType<EquipmentNetworkHandler>().ChangeWeightsFunction(__instance, psl);
+                FindObjectOfType<EquipmentNetworkHandler>().DropWeightServerRpc(__instance.playerClientId, __instance.currentlyHeldObjectServer.itemProperties.weight);
+                psl.canDrop = false;
             }
         }
 
@@ -278,8 +231,6 @@ namespace LethalGym.Scripts
 
             if (PlayerStrengthLevel.strongerBodyStatus)
             {
-                Debug.LogWarning(PlayerStrengthLevel.strongerBodyStatus);
-
                 PlayerStrengthLevel psl = GameNetworkManager.Instance.localPlayerController.gameObject.GetComponent<PlayerStrengthLevel>();
                 if (psl == null)
                 {

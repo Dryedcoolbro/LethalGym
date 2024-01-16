@@ -5,6 +5,8 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEditor;
 using GameNetcodeStuff;
+using LethalGym.Scripts;
+using LethalLib.Modules;
 
 public class PlayerStrengthLevel : NetworkBehaviour
 {
@@ -38,9 +40,9 @@ public class PlayerStrengthLevel : NetworkBehaviour
         
     }
 
-    public void UpdateStrongerBodyStatus(bool newStatus)
+    public async void UpdateConfigs(bool nStrongerBodyStatus)
     {
-        strongerBodyStatus = newStatus;
+        strongerBodyStatus = nStrongerBodyStatus;
     }
 
     public void addRep(Equipment bench)
