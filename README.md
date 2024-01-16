@@ -67,3 +67,6 @@ https://github.com/EvaisaDev/UnityNetcodePatcher
 
 ## 3.0.2
 - Had to fix the README AGAIN
+
+## 3.1.0
+- Accidentally left the bench and squat rack at a price of 1 dollar when debugging.
