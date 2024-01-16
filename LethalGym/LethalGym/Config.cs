@@ -17,12 +17,19 @@ namespace LethalGym
     {
         [DataMember] public bool strongerBody {  get; private set; }
 
+        // Prices
+        [DataMember] public bool overridePrices { get; private set; }
+        [DataMember] public int benchPrice { get; private set; }
+        [DataMember] public int squatPrice { get; private set; }
+
         public Config(ConfigFile cfg)
         {
             InitInstance(this);
 
             strongerBody = cfg.Bind("General", "Stronger Body", false, "More strength levels you have, the faster you can walk while carrying heavy items").Value;
-
+            overridePrices = cfg.Bind("Prices", "Override Prices", false, "If set to true, all prices underneath will be set as the price no matter what.").Value;
+            benchPrice = cfg.Bind("Prices", "Bench Price", 60, "Default is 60").Value;
+            squatPrice = cfg.Bind("Prices", "Squat Rack Price", 60, "Default is 60").Value;
         }
 
         public static void RequestSync()

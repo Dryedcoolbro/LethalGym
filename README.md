@@ -84,3 +84,6 @@ https://github.com/EvaisaDev/UnityNetcodePatcher
 
 ## 3.3.2
 - Fixed bug where you couldn't buy equipment from ship upgrades
+
+## 3.4.0
+- Added config entry to adjust prices

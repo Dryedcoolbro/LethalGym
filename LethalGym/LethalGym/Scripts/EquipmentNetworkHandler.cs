@@ -13,7 +13,10 @@ namespace LethalGym.Scripts
     {
         // Configs
         public static bool strongerBody;
-        public static bool alwaysInStock;
+        // Prices
+        public static bool overridePrices;
+        public static int benchPrce;
+        public static int squatPrice;
 
         public override void OnNetworkSpawn()
         {
@@ -279,20 +282,39 @@ namespace LethalGym.Scripts
         public IEnumerator UpdateDecorPrice(UnlockablesList unlockablesList)
         {
             yield return new WaitForSeconds(2f);
-
-            if (Config.Instance.strongerBody)
+            
+            if (!Config.Instance.overridePrices)
             {
-                for (int i = 0; i < Unlockables.registeredUnlockables.Count; i++)
+                if (Config.Instance.strongerBody)
                 {
-                    if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[0])
+                    for (int i = 0; i < Unlockables.registeredUnlockables.Count; i++)
                     {
-                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 299);
-                        continue;
+                        if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[0])
+                        {
+                            Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 299);
+                            continue;
+                        }
+                        else if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[1])
+                        {
+                            Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 299);
+                            continue;
+                        }
                     }
-                    else if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[1])
+                }
+                else
+                {
+                    for (int i = 0; i < Unlockables.registeredUnlockables.Count; i++)
                     {
-                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 299);
-                        continue;
+                        if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[0])
+                        {
+                            Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 60);
+                            continue;
+                        }
+                        else if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[1])
+                        {
+                            Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 60);
+                            continue;
+                        }
                     }
                 }
             }
@@ -302,12 +324,12 @@ namespace LethalGym.Scripts
                 {
                     if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[0])
                     {
-                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 60);
+                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, Config.Instance.benchPrice);
                         continue;
                     }
                     else if (Unlockables.registeredUnlockables[i].unlockable == unlockablesList.unlockables[1])
                     {
-                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, 60);
+                        Unlockables.UpdateUnlockablePrice(Unlockables.registeredUnlockables[i].unlockable, Config.Instance.squatPrice);
                         continue;
                     }
                 }
