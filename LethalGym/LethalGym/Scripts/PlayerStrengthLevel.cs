@@ -40,7 +40,7 @@ public class PlayerStrengthLevel : NetworkBehaviour
         
     }
 
-    public async void UpdateConfigs(bool nStrongerBodyStatus)
+    public void UpdateConfigs(bool nStrongerBodyStatus)
     {
         strongerBodyStatus = nStrongerBodyStatus;
     }

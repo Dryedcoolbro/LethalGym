@@ -21,21 +21,11 @@ namespace LethalGym.Scripts
     [HarmonyPatch]
     internal class LethalGymPatches
     {
-        public static AnimatorOverrideController overrideController;
-
         //Animations
         public static AnimationClip benchEnter;
         public static AnimationClip benchRep;
         public static AnimationClip term1;
         public static AnimationClip term2;
-
-        [HarmonyPatch(typeof(StartOfRound), "Awake")]
-        [HarmonyPostfix]
-        public static void AddEmote(StartOfRound __instance)
-        {
-            __instance.localClientAnimatorController = overrideController;
-            __instance.otherClientsAnimatorController = overrideController;
-        }
 
         [HarmonyPatch(typeof(Terminal), "BeginUsingTerminal")]
         [HarmonyPostfix]

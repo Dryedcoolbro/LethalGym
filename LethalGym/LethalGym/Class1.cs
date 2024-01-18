@@ -98,8 +98,8 @@ namespace LethalGym
             harmony.PatchAll(typeof(Equipment));
             harmony.PatchAll(typeof(MoreEmotesPatcher));
             harmony.PatchAll(typeof(PlayerStrengthLevel));
-            harmony.PatchAll(typeof(Config));
-*/
+            harmony.PatchAll(typeof(Config));*/
+
             harmony.PatchAll();
 
             NetworkObjectManager.assetBundle = assetBundle;

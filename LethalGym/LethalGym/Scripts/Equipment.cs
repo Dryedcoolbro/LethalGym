@@ -27,8 +27,6 @@ public class Equipment : NetworkBehaviour
     public AnimatorOverrideController overrideController;
     public AnimationClip equipmentEnter;
     public AnimationClip equipmentRep;
-    public static AnimationClip term1;
-    public static AnimationClip term2;
 
     // ANIMATIONS
     public static AnimationClip benchEnter;
@@ -66,8 +64,6 @@ public class Equipment : NetworkBehaviour
 
     public void Start()
     {
-        Debug.LogWarning(term1);
-        Debug.LogWarning(term2);
         nameText.text = "Enter Bench";
         repsText.text = "To Start Count";
 

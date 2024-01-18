@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
-    <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')"/>
+    <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
   </Target>
   
   <ItemGroup>
@@ -27,7 +27,7 @@
       <HintPath>C:\Users\longx\AppData\Roaming\Thunderstore Mod Manager\DataFolder\LethalCompany\profiles\Default\BepInEx\core\BepInEx.Harmony.dll</HintPath>
     </Reference>
     <Reference Include="LethalLib">
-      <HintPath>..\..\..\..\Tools-Assets\LethalLib\Evaisa-LethalLib-0.13.1\plugins\LethalLib\LethalLib.dll</HintPath>
+      <HintPath>..\..\..\..\Tools-Assets\LethalLib\Evaisa-LethalLib-0.13.2\plugins\LethalLib\LethalLib.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections">
       <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Collections.dll</HintPath>
