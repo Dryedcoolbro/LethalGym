@@ -1,4 +1,4 @@
-#OUTDATED
+# OUTDATED
 No plans for updating it any time soon
 
 # Lethal Gym
