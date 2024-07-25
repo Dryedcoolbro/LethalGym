@@ -1,3 +1,6 @@
+#OUTDATED
+No plans for updating it any time soon
+
 # Lethal Gym
 This mod adds the feature to workout in the comfort of your own ship.
 
